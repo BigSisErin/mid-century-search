@@ -151,6 +151,9 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
       <li>→ <a href="https://www.flickr.com/photos/leifpeng/collections" target="_blank" rel="noopener">leifpeng's collections</a> on Flickr. Retro ads and cartoons sorted by studio and artist.</li>
       <li>→ <a href="https://archive.org/details/cartoonmodern" target="_blank" rel="noopener">Cartoon Modern</a> on Internet Archive. The full book on 1950s animation design, searchable inside the reader.</li>
       <li>→ <a href="https://60s.myretrotvs.com/" target="_blank" rel="noopener">My Retro TV</a>. 1950s and 60s commercials and cartoons, sorted by year.</li>
+      <li>→ <a href="https://spelunkr.tv/" target="_blank" rel="noopener">Spelunkr</a>. Free 24/7 TV channels built from Internet Archive videos. Watch by channel, no keyword search.</li>
+      <li>→ <a href="https://www.heritagetype.com/pages/free-vintage-illustrations" target="_blank" rel="noopener">Heritage Type free vintage illustrations</a>. A free page of downloads. Their site search returns mostly paid sets, so browse this page instead.</li>
+      <li>→ <a href="https://centurylibrary.com/" target="_blank" rel="noopener">Century Library</a>. Paid membership with 50,000+ restored vintage assets. No free search, so check the license before you subscribe.</li>
     </ul>
   </section>
 
@@ -187,6 +190,10 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
       url: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22image%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); } },
     { g: 'scan', id: 'iatxt', name: 'Internet Archive, magazines and books', desc: 'Trade annuals, ad magazines, catalogs and sample books. The real print texture.', tags: [['mixed','Rights vary'],['neutral','Era filter']], on: true,
       url: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22texts%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); } },
+    { g: 'scan', id: 'rawpixel', name: 'Rawpixel, public domain', desc: 'Huge collection of remastered scans from museums and old books. Cleaned up, so less grit, and a lot to sift through.', tags: [['ok','CC0 section'],['mixed','Check original date']], on: true,
+      url: function (q) { return 'https://www.rawpixel.com/search/' + enc(q) + '?page=1&sort=curated&topic=_public_domain'; } },
+    { g: 'scan', id: 'gfairy', name: 'The Graphics Fairy', desc: 'Restored vintage clip art. Leans Victorian and early 1900s, so use it for older material, not the 50s and 60s.', tags: [['mixed','Public domain claimed'],['neutral','Skews pre-1930']], on: false,
+      url: function (q) { return 'https://thegraphicsfairy.com/?s=' + enc(q); } },
     { g: 'scan', id: 'flickr', name: 'Flickr, everyone', desc: 'Personal scans of mid-century ads, books and packaging. Great grit, unknown rights.', tags: [['ref','Reference only']], on: true,
       url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q); } },
 
