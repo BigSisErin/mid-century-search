@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Epilogue:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* Layout: one keyword box on a dark band, sources listed below as scannable rows grouped by how much you can trust the rights. */
+/* Layout: keyword band on top, live results grouped by source right under it, then the sources that can only open on their own sites. */
 :root {
   --bg: #F4F2EA;
   --bg-2: #EAE5D8;
@@ -22,7 +22,6 @@
   --red: #E91A41;
   --teal: #3A887D;
   --rule: rgba(46,26,14,0.14);
-  --field: #FFFFFF;
   --chip-ok: #3A887D;
   --chip-mixed: #8a5a12;
   --chip-ref: #E91A41;
@@ -33,63 +32,89 @@
   :root:not([data-theme="light"]) {
     --bg: #1d120a; --bg-2: #2a1b11; --bg-dark: #120a05;
     --text: #F4F2EA; --text-mid: rgba(244,242,234,0.72); --text-dim: rgba(244,242,234,0.5);
-    --rule: rgba(244,242,234,0.16); --field: #120a05;
+    --rule: rgba(244,242,234,0.16);
     --chip-ok: #6fc2b5; --chip-mixed: #e8b567; --chip-ref: #ff6b86; --red: #ff3b5f; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #1d120a; --bg-2: #2a1b11; --bg-dark: #120a05;
   --text: #F4F2EA; --text-mid: rgba(244,242,234,0.72); --text-dim: rgba(244,242,234,0.5);
-  --rule: rgba(244,242,234,0.16); --field: #120a05;
+  --rule: rgba(244,242,234,0.16);
   --chip-ok: #6fc2b5; --chip-mixed: #e8b567; --chip-ref: #ff6b86; --red: #ff3b5f; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--ff-body); font-size: 16px; line-height: 1.6; }
 h1, h2, h3 { font-family: var(--ff-display); font-weight: 400; margin: 0; text-wrap: balance; }
-.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.band { background: var(--bg-dark); color: var(--text-inv); padding-block: 56px 40px; }
-.eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--red); margin: 0 0 18px; }
-h1 { font-size: clamp(36px, 7vw, 72px); line-height: 1.02; margin-bottom: 14px; }
-.lede { color: var(--text-inv-mid); max-width: 56ch; margin: 0 0 32px; }
-.search { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
-.search input[type=text] { flex: 1 1 320px; min-width: 0; font: 500 20px var(--ff-body); padding: 16px 18px; border: 2px solid transparent; background: #F4F2EA; color: #2E1A0E; border-radius: 4px; }
-.search input[type=text]:focus-visible, button:focus-visible, a:focus-visible, label:focus-within { outline: 3px solid var(--red); outline-offset: 2px; }
-.btn { font: 600 14px var(--ff-body); letter-spacing: .06em; text-transform: uppercase; padding: 16px 22px; border: 0; border-radius: 4px; cursor: pointer; background: var(--red); color: #fff; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { background: var(--bg-dark); color: var(--text-inv); padding-block: 48px 32px; }
+.eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--red); margin: 0 0 16px; }
+h1 { font-size: clamp(34px, 6.5vw, 64px); line-height: 1.02; margin-bottom: 12px; }
+.lede { color: var(--text-inv-mid); max-width: 58ch; margin: 0 0 28px; }
+.search { display: flex; flex-wrap: wrap; gap: 12px; }
+.search input[type=text] { flex: 1 1 320px; min-width: 0; font: 500 20px var(--ff-body); padding: 15px 18px; border: 2px solid transparent; background: #F4F2EA; color: #2E1A0E; border-radius: 4px; }
+input:focus-visible, button:focus-visible, a:focus-visible, label:focus-within { outline: 3px solid var(--red); outline-offset: 2px; }
+.btn { font: 600 14px var(--ff-body); letter-spacing: .06em; text-transform: uppercase; padding: 15px 26px; border: 0; border-radius: 4px; cursor: pointer; background: var(--red); color: #fff; }
 .btn:hover { filter: brightness(1.08); }
-.row2 { display: flex; flex-wrap: wrap; gap: 20px 28px; align-items: center; margin-top: 20px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; margin-top: 18px; }
 .seg { display: inline-flex; border: 1px solid rgba(244,242,234,0.35); border-radius: 4px; overflow: hidden; }
 .seg label { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--text-inv-mid); }
 .seg input { position: absolute; opacity: 0; pointer-events: none; }
 .seg label:has(input:checked) { background: #F4F2EA; color: #2E1A0E; font-weight: 600; }
 .small { font-size: 13px; color: var(--text-inv-mid); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .chip { font: 500 13px var(--ff-body); padding: 6px 12px; border: 1px solid rgba(244,242,234,0.35); background: transparent; color: var(--text-inv); border-radius: 999px; cursor: pointer; }
 .chip:hover { border-color: var(--red); color: #fff; }
-.status { min-height: 1.6em; margin-top: 14px; font-size: 14px; color: var(--text-inv); }
-section.sec { padding-block: 48px 8px; }
+details.opts { margin-top: 18px; color: var(--text-inv-mid); font-size: 13px; }
+details.opts summary { cursor: pointer; }
+details.opts .optsbody { margin-top: 10px; display: grid; gap: 14px; }
+.srcpick { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.srcpick label { display: inline-flex; gap: 8px; align-items: center; color: var(--text-inv); cursor: pointer; }
+.srcpick input { accent-color: var(--red); width: 16px; height: 16px; margin: 0; }
+details.opts input[type=text] { font: 14px var(--ff-body); padding: 8px 10px; width: min(100%, 360px); border-radius: 4px; border: 1px solid rgba(244,242,234,0.35); background: transparent; color: var(--text-inv); }
 .bar { width: 48px; height: 3px; background: var(--red); margin-bottom: 14px; }
 .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--text-dim); margin-bottom: 10px; }
-h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
-.sub { color: var(--text-mid); max-width: 62ch; margin: 0 0 22px; }
-.list { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-.src { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 16px; align-items: center; background: var(--bg); padding: 16px 18px; }
-.src:nth-child(even) { background: var(--bg-2); }
-.src input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--red); margin: 0; }
-.src h3 { font-family: var(--ff-body); font-weight: 600; font-size: 17px; line-height: 1.3; }
-.src p { margin: 2px 0 0; font-size: 14px; color: var(--text-mid); }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.tag { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+h2 { font-size: clamp(24px, 4vw, 34px); line-height: 1.1; margin-bottom: 10px; }
+.sub { color: var(--text-mid); max-width: 64ch; margin: 0 0 22px; }
+section.sec { padding-block: 44px 8px; }
+.res { margin-bottom: 40px; }
+.reshead { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--rule); padding-bottom: 10px; margin-bottom: 14px; }
+.reshead h3 { font-family: var(--ff-body); font-weight: 700; font-size: 20px; }
+.reshead .count { color: var(--text-dim); font-size: 14px; margin-left: 8px; font-weight: 500; }
+.reshead a { color: var(--teal); font-weight: 600; font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 16px; }
+.card { display: flex; flex-direction: column; text-decoration: none; color: inherit; min-width: 0; }
+.thumb { aspect-ratio: 4 / 3; background: var(--bg-2); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 3px; }
+.thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.card:hover .cap b, .card:focus-visible .cap b { text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 3px; }
+.cap { padding-top: 8px; display: grid; gap: 2px; min-width: 0; }
+.cap b { font-weight: 600; font-size: 13.5px; line-height: 1.35; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cap .meta { font-size: 12px; color: var(--text-dim); overflow-wrap: anywhere; }
+.tag { justify-self: start; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 6px; border: 1px solid currentColor; border-radius: 2px; margin-top: 3px; }
 .t-ok { color: var(--chip-ok); } .t-mixed { color: var(--chip-mixed); } .t-ref { color: var(--chip-ref); } .t-neutral { color: var(--text-dim); }
+.more { margin-top: 16px; font: 600 13px var(--ff-body); letter-spacing: .06em; text-transform: uppercase; padding: 10px 16px; border: 2px solid var(--text); background: transparent; color: var(--text); border-radius: 4px; cursor: pointer; }
+.more:hover { background: var(--text); color: var(--bg); }
+.msg { color: var(--text-mid); font-size: 15px; padding: 14px 0; }
+.msg a { color: var(--teal); font-weight: 600; }
+.status { min-height: 1.6em; font-size: 14px; color: var(--text-inv); margin-top: 14px; }
+.links { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.lrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; align-items: center; background: var(--bg); padding: 14px 18px; }
+.lrow:nth-child(even) { background: var(--bg-2); }
+.lrow h3 { font-family: var(--ff-body); font-weight: 600; font-size: 16px; line-height: 1.3; }
+.lrow p { margin: 2px 0 0; font-size: 14px; color: var(--text-mid); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.tags .tag { margin-top: 0; }
 .go { font: 600 13px var(--ff-body); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; padding: 10px 14px; border: 2px solid var(--text); color: var(--text); border-radius: 4px; white-space: nowrap; }
 .go:hover { background: var(--text); color: var(--bg); }
+.browse ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .browse a { color: var(--teal); font-weight: 600; }
 .notes { padding-block: 40px 72px; }
 .notes ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 70ch; }
 .notes li { padding-left: 1.6em; position: relative; color: var(--text-mid); }
 .notes li::before { content: "→"; position: absolute; left: 0; color: var(--red); font-weight: 700; }
 @media (max-width: 560px) {
-  .src { grid-template-columns: auto minmax(0, 1fr); }
-  .src .go { grid-column: 2; justify-self: start; }
+  .lrow { grid-template-columns: minmax(0, 1fr); }
+  .lrow .go { justify-self: start; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -100,11 +125,11 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
   <div class="wrap">
     <p class="eyebrow">Big Sis / Research</p>
     <h1>Mid-Century Search</h1>
-    <p class="lede">One keyword, every archive. Pick the sources, hit search, and each one opens in its own tab on its own results page.</p>
+    <p class="lede">Type a keyword and the results land right here, grouped by source, with the rights note on every image. Sources that can't be pulled in open on their own sites from the buttons further down.</p>
 
     <form class="search" id="f" autocomplete="off">
       <input type="text" id="q" aria-label="Keywords" value="spot illustration" placeholder="Try: gouache, airline, limited color">
-      <button class="btn" type="submit" id="openAll">Search checked sources</button>
+      <button class="btn" type="submit">Search</button>
     </form>
 
     <div class="row2">
@@ -112,41 +137,43 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
         <label><input type="radio" name="era" value="on" checked>1950 to 1969</label>
         <label><input type="radio" name="era" value="off">Any era</label>
       </div>
-      <span class="small" id="eraNote">Era filter applies on Internet Archive and Letterform Archive. Other sources search all dates.</span>
+      <span class="small">Era filter applies to Internet Archive and Library of Congress. Items without a date drop out when it's on.</span>
     </div>
 
     <div class="chips" id="chips" aria-label="Keyword ideas"></div>
+
+    <details class="opts">
+      <summary>Sources and settings</summary>
+      <div class="optsbody">
+        <div class="srcpick" id="srcpick"></div>
+        <label for="sikey">Smithsonian API key (optional). The shared key allows about 30 searches an hour.
+          <br><input type="text" id="sikey" placeholder="Paste a free key from api.data.gov"></label>
+      </div>
+    </details>
     <div class="status" id="status" role="status" aria-live="polite"></div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="sec">
-    <div class="bar"></div><div class="label">Best for rights</div>
-    <h2>Institutional archives</h2>
-    <p class="sub">Public collections with rights information attached to each item. Still check the item before it goes anywhere near client work.</p>
-    <div class="list" id="g-inst"></div>
+    <div class="bar"></div><div class="label">Live results</div>
+    <h2 id="rtitle">Results</h2>
+    <p class="sub">Every image links to the item on its own site. Rights notes are a first read, so confirm on the item page before anything goes near client work.</p>
+    <div id="results"></div>
   </section>
 
   <section class="sec">
-    <div class="bar"></div><div class="label">Best for grit</div>
-    <h2>Scans and ephemera</h2>
-    <p class="sub">Where the real print texture lives. Rights vary by item and are often unknown.</p>
-    <div class="list" id="g-scan"></div>
-  </section>
-
-  <section class="sec">
-    <div class="bar"></div><div class="label">Inspiration only</div>
-    <h2>Reference, not source</h2>
-    <p class="sub">Good for finding the look and the artist names. Don't treat anything found here as usable.</p>
-    <div class="list" id="g-ref"></div>
+    <div class="bar"></div><div class="label">Opens on its own site</div>
+    <h2>More places to search</h2>
+    <p class="sub">These sites don't allow their results to be pulled into another page. Each button opens that site's own results for your keyword in a new tab.</p>
+    <div class="links" id="links"></div>
   </section>
 
   <section class="sec browse">
     <div class="bar"></div><div class="label">Browse, no keyword search</div>
     <h2>Collections worth a scroll</h2>
     <p class="sub">These are organized by collection or artist, so the keyword box can't reach them.</p>
-    <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
+    <ul>
       <li>→ <a href="https://www.flickr.com/groups/midcenturyinprint/" target="_blank" rel="noopener">Mid-century Illustrated</a> on Flickr. Member group, 1945 to 1965 posters, comics, recipes.</li>
       <li>→ <a href="https://www.flickr.com/photos/leifpeng/collections" target="_blank" rel="noopener">leifpeng's collections</a> on Flickr. Retro ads and cartoons sorted by studio and artist.</li>
       <li>→ <a href="https://archive.org/details/cartoonmodern" target="_blank" rel="noopener">Cartoon Modern</a> on Internet Archive. The full book on 1950s animation design, searchable inside the reader.</li>
@@ -164,7 +191,7 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
     <ul>
       <li>1931 to 1963 US work may be public domain if its copyright was never renewed, but that has to be checked item by item.</li>
       <li>CC0 on an aggregator doesn't prove the original is public domain.</li>
-      <li>Result pages load in each site's own interface. If a site changes its search address, that button will land on its home page instead of results.</li>
+      <li>Results are the first dozen per source, in each site's own relevance order. Use Show more or the See all link to go deeper.</li>
     </ul>
   </section>
 </main>
@@ -173,38 +200,129 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
 (function () {
   var $ = function (s) { return document.querySelector(s); };
   var enc = encodeURIComponent;
+  var PER = 12;
+  var ERA = '1950 TO 1969';
 
-  var SOURCES = [
-    { g: 'inst', id: 'commons', name: 'Flickr Commons', desc: 'Libraries and museums posting photos and scans with no known copyright restrictions.', tags: [['ok','Institutions'],['mixed','Check each item']], on: true,
-      url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q) + '&is_commons=true'; } },
-    { g: 'inst', id: 'loc', name: 'Library of Congress', desc: 'Prints, ads, posters and magazines. Each item carries a rights statement.', tags: [['mixed','Rights per item']], on: true,
-      url: function (q) { return 'https://www.loc.gov/search/?q=' + enc(q) + '&fa=online-format:image'; } },
-    { g: 'inst', id: 'nypl', name: 'NYPL Digital Collections', desc: 'Deep ephemera and advertising holdings. Filter to public domain on the results page.', tags: [['mixed','Filter on page']], on: true,
-      url: function (q) { return 'https://digitalcollections.nypl.org/search/index?keywords=' + enc(q); } },
-    { g: 'inst', id: 'si', name: 'Smithsonian Open Access', desc: 'Trade catalogs and ephemera. CC0 items are marked.', tags: [['ok','CC0 items']], on: true,
-      url: function (q) { return 'https://www.si.edu/search/collection-images?edan_q=' + enc(q); } },
-    { g: 'inst', id: 'wmc', name: 'Wikimedia Commons', desc: 'Best for tracking down one specific image. License is listed on every file.', tags: [['mixed','License per file']], on: false,
-      url: function (q) { return 'https://commons.wikimedia.org/w/index.php?search=' + enc(q) + '&ns6=1'; } },
+  function arr(v) { return Array.isArray(v) ? v[0] : v; }
+  function decode(s) { var t = document.createElement('textarea'); t.innerHTML = s || ''; return t.value; }
+  function https(u) { return u ? String(u).replace(/^http:/, 'https:').replace(/^\/\//, 'https://') : u; }
+  function plainTitle(t) { return decode(t).replace(/^File:/, '').replace(/\.[a-z0-9]{3,4}$/i, '').replace(/_/g, ' '); }
+  function fetchJSON(u) { return fetch(u).then(function (r) { if (!r.ok) { var e = new Error('HTTP ' + r.status); e.status = r.status; throw e; } return r.json(); }); }
 
-    { g: 'scan', id: 'iaimg', name: 'Internet Archive, images', desc: 'Uploaded scans and photo sets. Uneven, but this is where odd finds turn up.', tags: [['mixed','Rights vary'],['neutral','Era filter']], on: true,
-      url: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22image%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); } },
-    { g: 'scan', id: 'iatxt', name: 'Internet Archive, magazines and books', desc: 'Trade annuals, ad magazines, catalogs and sample books. The real print texture.', tags: [['mixed','Rights vary'],['neutral','Era filter']], on: true,
-      url: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22texts%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); } },
-    { g: 'scan', id: 'rawpixel', name: 'Rawpixel, public domain', desc: 'Huge collection of remastered scans from museums and old books. Cleaned up, so less grit, and a lot to sift through.', tags: [['ok','CC0 section'],['mixed','Check original date']], on: true,
-      url: function (q) { return 'https://www.rawpixel.com/search/' + enc(q) + '?page=1&sort=curated&topic=_public_domain'; } },
-    { g: 'scan', id: 'gfairy', name: 'The Graphics Fairy', desc: 'Restored vintage clip art. Leans Victorian and early 1900s, so use it for older material, not the 50s and 60s.', tags: [['mixed','Public domain claimed'],['neutral','Skews pre-1930']], on: false,
-      url: function (q) { return 'https://thegraphicsfairy.com/?s=' + enc(q); } },
-    { g: 'scan', id: 'flickr', name: 'Flickr, everyone', desc: 'Personal scans of mid-century ads, books and packaging. Great grit, unknown rights.', tags: [['ref','Reference only']], on: true,
-      url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q); } },
+  /* Sources that return results inside this page */
+  function iaSource(id, name, type) {
+    return {
+      id: id, name: name, on: true,
+      all: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22' + type + '%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); },
+      run: function (q, era, page) {
+        var query = q + ' AND mediatype:(' + type + ')' + (era ? ' AND year:[' + ERA + ']' : '');
+        var u = 'https://archive.org/advancedsearch.php?q=' + enc(query) + '&fl[]=identifier&fl[]=title&fl[]=year&fl[]=creator&fl[]=licenseurl&rows=' + PER + '&page=' + page + '&output=json';
+        return fetchJSON(u).then(function (j) {
+          var d = j.response;
+          return { total: d.numFound, items: d.docs.map(function (x) {
+            return { title: arr(x.title) || x.identifier, img: 'https://archive.org/services/img/' + x.identifier, href: 'https://archive.org/details/' + x.identifier,
+              meta: [x.year, arr(x.creator)].filter(Boolean).join(' · '), rights: x.licenseurl ? ['ok', 'License listed'] : ['mixed', 'Rights unknown'] };
+          }) };
+        });
+      }
+    };
+  }
 
-    { g: 'ref', id: 'lfa', name: 'Letterform Archive', desc: 'Type specimens, ads and design books. Images are copyrighted.', tags: [['ref','Reference only'],['neutral','Era filter']], on: true,
-      url: function (q, era) { return 'https://oa.letterformarchive.org/?' + (era ? 'dims=Decade&vals0=1950s,1960s&' : '') + 'searchText=' + enc(q); } },
-    { g: 'ref', id: 'pgda', name: "People's Graphic Design Archive", desc: 'Crowd-sourced design history. Its own search is unreliable, so this runs a site search through Google.', tags: [['ref','Reference only']], on: true,
-      url: function (q) { return 'https://www.google.com/search?q=' + enc('site:peoplesgdarchive.org ' + q); } },
-    { g: 'ref', id: 'tumblr', name: 'Mid-Century Modern Graphic Design (Tumblr)', desc: "Theo Inglis's archive. No provenance on posts, so use it to find the look, then trace the source.", tags: [['ref','Reference only']], on: false,
-      url: function (q) { return 'https://midcenturymoderndesign.tumblr.com/search/' + enc(q); } },
-    { g: 'ref', id: 'pin', name: 'Pinterest', desc: 'Fast for finding artist names and styles. Needs a login, and sources are usually lost.', tags: [['ref','Reference only']], on: false,
-      url: function (q) { return 'https://www.pinterest.com/search/pins/?q=' + enc(q); } }
+  var API = [
+    iaSource('iaimg', 'Internet Archive, images', 'image'),
+    iaSource('iatxt', 'Internet Archive, magazines and books', 'texts'),
+    {
+      id: 'loc', name: 'Library of Congress', on: true,
+      all: function (q, era) { return 'https://www.loc.gov/search/?q=' + enc(q) + '&fa=online-format:image' + (era ? '&dates=1950/1969' : ''); },
+      run: function (q, era, page) {
+        var u = 'https://www.loc.gov/search/?q=' + enc(q) + '&fa=online-format:image&fo=json&c=' + PER + '&sp=' + page + (era ? '&dates=1950/1969' : '');
+        return fetchJSON(u).then(function (j) {
+          var items = [];
+          (j.results || []).forEach(function (r) {
+            var img = Array.isArray(r.image_url) ? r.image_url[0] : r.image_url;
+            if (!img || !r.id) return;
+            items.push({ title: decode(arr(r.title) || 'Untitled'), img: https(img), href: https(r.id), meta: r.date || '', rights: ['mixed', 'Check rights'] });
+          });
+          return { total: j.pagination && j.pagination.total, items: items };
+        });
+      }
+    },
+    {
+      id: 'wmc', name: 'Wikimedia Commons', on: true,
+      all: function (q) { return 'https://commons.wikimedia.org/w/index.php?search=' + enc(q) + '&ns6=1'; },
+      run: function (q, era, page) {
+        var u = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' + enc(q) + '&gsrnamespace=6&gsrlimit=' + PER + '&gsroffset=' + ((page - 1) * PER) + '&gsrinfo=totalhits&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=360&format=json&origin=*';
+        return fetchJSON(u).then(function (j) {
+          var pages = (j.query && j.query.pages) ? Object.keys(j.query.pages).map(function (k) { return j.query.pages[k]; }) : [];
+          pages.sort(function (a, b) { return a.index - b.index; });
+          var items = [];
+          pages.forEach(function (p) {
+            var ii = p.imageinfo && p.imageinfo[0];
+            if (!ii || !ii.thumburl) return;
+            var lic = ii.extmetadata && ii.extmetadata.LicenseShortName && ii.extmetadata.LicenseShortName.value;
+            var ok = lic && /public domain|cc0|pd/i.test(lic);
+            items.push({ title: plainTitle(p.title), img: ii.thumburl, href: ii.descriptionurl, meta: '', rights: [ok ? 'ok' : 'mixed', lic || 'See file page'] });
+          });
+          return { total: j.query && j.query.searchinfo && j.query.searchinfo.totalhits, items: items };
+        });
+      }
+    },
+    {
+      id: 'si', name: 'Smithsonian Open Access', on: true,
+      all: function (q) { return 'https://www.si.edu/search/collection-images?edan_q=' + enc(q); },
+      run: function (q, era, page) {
+        var key = ($('#sikey').value || '').trim() || 'DEMO_KEY';
+        var u = 'https://api.si.edu/openaccess/api/v1.0/search?q=' + enc(q + ' online_media_type:Images') + '&start=' + ((page - 1) * PER) + '&rows=' + PER + '&api_key=' + enc(key);
+        return fetchJSON(u).then(function (j) {
+          var items = [];
+          ((j.response && j.response.rows) || []).forEach(function (row) {
+            var dnr = (row.content && row.content.descriptiveNonRepeating) || {};
+            var m = dnr.online_media && dnr.online_media.media && dnr.online_media.media[0];
+            var img = m && (m.thumbnail || m.content);
+            if (!img) return;
+            var cc0 = m.usage && m.usage.access === 'CC0';
+            items.push({ title: row.title || 'Untitled', img: https(img), href: https(dnr.record_link || ('https://www.si.edu/search/collection-images?edan_q=' + enc(row.title || ''))),
+              meta: dnr.data_source || '', rights: [cc0 ? 'ok' : 'mixed', cc0 ? 'CC0' : 'Check rights'] });
+          });
+          return { total: j.response && j.response.rowCount, items: items };
+        });
+      }
+    },
+    {
+      id: 'gfairy', name: 'The Graphics Fairy', on: false,
+      all: function (q) { return 'https://thegraphicsfairy.com/?s=' + enc(q); },
+      run: function (q, era, page) {
+        var u = 'https://thegraphicsfairy.com/wp-json/wp/v2/posts?search=' + enc(q) + '&per_page=' + PER + '&page=' + page + '&_embed=wp:featuredmedia&_fields=title,link,date,_links,_embedded';
+        return fetch(u).then(function (r) {
+          if (!r.ok) { var e = new Error('HTTP ' + r.status); e.status = r.status; throw e; }
+          var total = parseInt(r.headers.get('X-WP-Total'), 10);
+          return r.json().then(function (j) {
+            var items = [];
+            j.forEach(function (p) {
+              var fm = p._embedded && p._embedded['wp:featuredmedia'] && p._embedded['wp:featuredmedia'][0];
+              if (!fm) return;
+              var sizes = fm.media_details && fm.media_details.sizes;
+              var img = (sizes && sizes.medium && sizes.medium.source_url) || fm.source_url;
+              if (!img) return;
+              items.push({ title: decode(p.title && p.title.rendered), img: https(img), href: p.link, meta: (p.date || '').slice(0, 4), rights: ['mixed', 'Public domain claimed'] });
+            });
+            return { total: isNaN(total) ? null : total, items: items };
+          });
+        });
+      }
+    }
+  ];
+
+  /* Sources that can only open on their own site */
+  var LINKS = [
+    { name: 'Flickr Commons', desc: 'Libraries and museums posting scans with no known copyright restrictions.', tags: [['ok', 'Institutions'], ['mixed', 'Check each item']], url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q) + '&is_commons=true'; } },
+    { name: 'Flickr, everyone', desc: 'Personal scans of mid-century ads, books and packaging. Great grit, unknown rights.', tags: [['ref', 'Reference only']], url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q); } },
+    { name: 'NYPL Digital Collections', desc: 'Deep ephemera and advertising holdings. Use the public domain filter on the results page.', tags: [['mixed', 'Filter on page']], url: function (q) { return 'https://digitalcollections.nypl.org/search/index?keywords=' + enc(q); } },
+    { name: 'Rawpixel, public domain', desc: 'Huge collection of remastered scans. Cleaned up, so less grit, and a lot to sift through.', tags: [['ok', 'CC0 section'], ['mixed', 'Check original date']], url: function (q) { return 'https://www.rawpixel.com/search/' + enc(q) + '?page=1&sort=curated&topic=_public_domain'; } },
+    { name: 'Letterform Archive', desc: 'Type specimens, ads and design books. Images are copyrighted.', tags: [['ref', 'Reference only'], ['neutral', 'Era filter']], url: function (q, era) { return 'https://oa.letterformarchive.org/?' + (era ? 'dims=Decade&vals0=1950s,1960s&' : '') + 'searchText=' + enc(q); } },
+    { name: "People's Graphic Design Archive", desc: 'Crowd-sourced design history. Its own search is unreliable, so this runs a site search through Google.', tags: [['ref', 'Reference only']], url: function (q) { return 'https://www.google.com/search?q=' + enc('site:peoplesgdarchive.org ' + q); } },
+    { name: 'Mid-Century Modern Graphic Design (Tumblr)', desc: "Theo Inglis's archive. No provenance on posts, so use it to find the look, then trace the source.", tags: [['ref', 'Reference only']], url: function (q) { return 'https://midcenturymoderndesign.tumblr.com/search/' + enc(q); } },
+    { name: 'Pinterest', desc: 'Fast for finding artist names and styles. Needs a login, and sources are usually lost.', tags: [['ref', 'Reference only']], url: function (q) { return 'https://www.pinterest.com/search/pins/?q=' + enc(q); } }
   ];
 
   var IDEAS = ['spot illustration', 'gouache', 'limited color', 'screen print', 'trade ad', 'annual report', 'airline poster', 'children’s book', 'packaging', 'atomic age', 'Charley Harper', 'Alexander Girard', 'Mary Blair', 'Saul Bass'];
@@ -213,74 +331,123 @@ h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
     get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
-  var saved = store.get('mcs-checked') || {};
+  var saved = store.get('mcs2-sources') || {};
+  var runId = 0;
 
-  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
-
-  function render() {
-    ['inst', 'scan', 'ref'].forEach(function (g) {
-      $('#g-' + g).innerHTML = SOURCES.filter(function (s) { return s.g === g; }).map(function (s) {
-        var checked = (s.id in saved) ? saved[s.id] : s.on;
-        return '<div class="src">' +
-          '<input type="checkbox" id="c-' + s.id + '" data-id="' + s.id + '"' + (checked ? ' checked' : '') + ' aria-label="Include ' + esc(s.name) + '">' +
-          '<div><h3>' + esc(s.name) + '</h3><p>' + esc(s.desc) + '</p><div class="tags">' +
-          s.tags.map(function (t) { return '<span class="tag t-' + t[0] + '">' + esc(t[1]) + '</span>'; }).join('') +
-          '</div></div>' +
-          '<a class="go" id="a-' + s.id + '" target="_blank" rel="noopener" href="#">Search</a></div>';
-      }).join('');
-    });
-    $('#chips').innerHTML = IDEAS.map(function (w) { return '<button type="button" class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
-    links();
-  }
-
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function tagEl(t) { return el('span', 'tag t-' + t[0], t[1]); }
+  function isOn(s) { return (s.id in saved) ? saved[s.id] : s.on; }
   function eraOn() { return document.querySelector('input[name=era]:checked').value === 'on'; }
   function query() { return $('#q').value.trim(); }
+  function fmt(n) { return (n == null || isNaN(n)) ? '' : Number(n).toLocaleString('en-US'); }
 
-  function links() {
-    var q = query(), era = eraOn();
-    SOURCES.forEach(function (s) {
-      var a = $('#a-' + s.id);
-      if (a) a.href = q ? s.url(q, era) : '#';
+  function buildStatic() {
+    $('#chips').innerHTML = '';
+    IDEAS.forEach(function (w) {
+      var b = el('button', 'chip', w); b.type = 'button'; b.dataset.w = w; $('#chips').appendChild(b);
     });
-    var n = SOURCES.filter(function (s) { var c = $('#c-' + s.id); return c && c.checked; }).length;
-    $('#openAll').textContent = 'Search ' + n + ' checked source' + (n === 1 ? '' : 's');
+    $('#srcpick').innerHTML = '';
+    API.forEach(function (s) {
+      var l = el('label'); var c = document.createElement('input'); c.type = 'checkbox'; c.dataset.id = s.id; c.checked = isOn(s);
+      l.appendChild(c); l.appendChild(document.createTextNode(s.name)); $('#srcpick').appendChild(l);
+    });
+    var k = store.get('mcs2-sikey'); if (k) $('#sikey').value = k;
+  }
+
+  function renderLinks() {
+    var q = query(), era = eraOn();
+    var box = $('#links'); box.innerHTML = '';
+    LINKS.forEach(function (s) {
+      var row = el('div', 'lrow'); var info = el('div');
+      info.appendChild(el('h3', null, s.name)); info.appendChild(el('p', null, s.desc));
+      var tg = el('div', 'tags'); s.tags.forEach(function (t) { tg.appendChild(tagEl(t)); }); info.appendChild(tg);
+      var a = el('a', 'go', 'Search'); a.target = '_blank'; a.rel = 'noopener'; a.href = q ? s.url(q, era) : '#';
+      row.appendChild(info); row.appendChild(a); box.appendChild(row);
+    });
+  }
+
+  function cardFor(it) {
+    var a = el('a', 'card'); a.href = it.href; a.target = '_blank'; a.rel = 'noopener';
+    var th = el('div', 'thumb'); var im = document.createElement('img'); im.loading = 'lazy'; im.alt = ''; im.src = it.img;
+    im.onerror = function () { th.textContent = 'No preview'; th.style.color = 'var(--text-dim)'; th.style.fontSize = '12px'; };
+    th.appendChild(im); a.appendChild(th);
+    var cap = el('div', 'cap'); cap.appendChild(el('b', null, it.title));
+    if (it.meta) cap.appendChild(el('span', 'meta', it.meta));
+    cap.appendChild(tagEl(it.rights)); a.appendChild(cap);
+    return a;
+  }
+
+  function runSource(s, q, era, id) {
+    var sec = el('div', 'res');
+    var head = el('div', 'reshead'); var left = el('div'); var h = el('h3', null, s.name); var cnt = el('span', 'count', 'Searching...'); h.appendChild(cnt); left.appendChild(h);
+    var all = el('a', null, 'See all on site'); all.href = s.all(q, era); all.target = '_blank'; all.rel = 'noopener';
+    head.appendChild(left); head.appendChild(all); sec.appendChild(head);
+    var grid = el('div', 'grid'); sec.appendChild(grid);
+    var foot = el('div'); sec.appendChild(foot);
+    var page = 1, shown = 0;
+
+    function load() {
+      foot.innerHTML = '';
+      s.run(q, era, page).then(function (r) {
+        if (id !== runId) return;
+        r.items.forEach(function (it) { grid.appendChild(cardFor(it)); });
+        shown += r.items.length;
+        if (!shown) {
+          cnt.textContent = '';
+          foot.appendChild(el('p', 'msg', 'No results with images' + (era ? ' in 1950 to 1969' : '') + '. Try fewer words' + (era ? ' or switch to Any era' : '') + '.'));
+          return;
+        }
+        cnt.textContent = (r.total ? fmt(r.total) + ' found, showing ' + shown : 'Showing ' + shown);
+        if (r.items.length >= 6 && (!r.total || shown < r.total)) {
+          var m = el('button', 'more', 'Show more'); m.type = 'button';
+          m.onclick = function () { page++; load(); };
+          foot.appendChild(m);
+        }
+      }).catch(function (e) {
+        if (id !== runId) return;
+        cnt.textContent = '';
+        var p = el('p', 'msg');
+        var why = (e.status === 429 || e.status === 403) && s.id === 'si' ? 'The shared Smithsonian key hit its hourly limit. Paste your own free key under Sources and settings, or ' : "Couldn't load this source here. ";
+        p.appendChild(document.createTextNode(why));
+        var a2 = el('a', null, 'open it on the site'); a2.href = s.all(q, era); a2.target = '_blank'; a2.rel = 'noopener';
+        p.appendChild(a2); p.appendChild(document.createTextNode('.'));
+        foot.appendChild(p);
+      });
+    }
+    load();
+    return sec;
+  }
+
+  function search() {
+    var q = query(), st = $('#status'), box = $('#results');
+    renderLinks();
+    box.innerHTML = '';
+    if (!q) { st.textContent = 'Type a keyword first.'; $('#rtitle').textContent = 'Results'; return; }
+    var era = eraOn(), id = ++runId;
+    var chosen = API.filter(isOn);
+    $('#rtitle').textContent = 'Results for “' + q + '”';
+    if (!chosen.length) { st.textContent = 'Turn on at least one source under Sources and settings.'; return; }
+    st.textContent = 'Searching ' + chosen.length + ' source' + (chosen.length === 1 ? '' : 's') + (era ? ', 1950 to 1969 where supported' : '') + '.';
+    chosen.forEach(function (s) { box.appendChild(runSource(s, q, era, id)); });
   }
 
   document.addEventListener('change', function (e) {
-    if (e.target.matches('input[type=checkbox]')) {
-      saved[e.target.dataset.id] = e.target.checked;
-      store.set('mcs-checked', saved);
-    }
-    links();
+    var t = e.target;
+    if (t.matches('#srcpick input')) {
+      var src = API.filter(function (s) { return s.id === t.dataset.id; })[0];
+      saved[src.id] = t.checked; store.set('mcs2-sources', saved);
+    } else if (t.name === 'era') { search(); }
   });
-  $('#q').addEventListener('input', links);
+  $('#sikey').addEventListener('change', function () { store.set('mcs2-sikey', $('#sikey').value.trim()); });
+  $('#q').addEventListener('input', renderLinks);
   $('#chips').addEventListener('click', function (e) {
     var b = e.target.closest('.chip'); if (!b) return;
-    var cur = query();
-    $('#q').value = cur ? cur + ' ' + b.dataset.w : b.dataset.w;
-    links(); $('#q').focus();
+    var cur = query(); $('#q').value = cur ? cur + ' ' + b.dataset.w : b.dataset.w; renderLinks(); $('#q').focus();
   });
+  $('#f').addEventListener('submit', function (e) { e.preventDefault(); search(); });
 
-  $('#f').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var q = query(), st = $('#status');
-    if (!q) { st.textContent = 'Type a keyword first.'; return; }
-    var era = eraOn(), opened = 0, picked = 0;
-    SOURCES.forEach(function (s) {
-      var c = $('#c-' + s.id);
-      if (c && c.checked) {
-        picked++;
-        var w = null;
-        try { w = window.open(s.url(q, era), '_blank'); if (w) w.opener = null; } catch (err) {}
-        if (w) opened++;
-      }
-    });
-    if (!picked) st.textContent = 'Check at least one source.';
-    else if (opened === picked) st.textContent = 'Opened ' + opened + ' tab' + (opened === 1 ? '' : 's') + '.';
-    else st.textContent = 'Your browser blocked the extra tabs. Use the Search button beside each source instead, or allow pop-ups for this page.';
-  });
-
-  render();
+  buildStatic();
+  search();
 })();
 </script>
 
