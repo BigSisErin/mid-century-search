@@ -277,8 +277,9 @@ section.sec { padding-block: 44px 8px; }
           var items = [];
           ((j.response && j.response.rows) || []).forEach(function (row) {
             var dnr = (row.content && row.content.descriptiveNonRepeating) || {};
-            var m = dnr.online_media && dnr.online_media.media && dnr.online_media.media[0];
-            var img = m && (m.thumbnail || m.content);
+            var list = (dnr.online_media && dnr.online_media.media) || [];
+            var m = list.filter(function (x) { return x.thumbnail || x.idsId || /^https?:/.test(x.content || ''); })[0];
+            var img = m && (m.thumbnail || (m.idsId ? 'https://ids.si.edu/ids/deliveryService?id=' + m.idsId + '&max=400' : m.content));
             if (!img) return;
             var cc0 = m.usage && m.usage.access === 'CC0';
             items.push({ title: row.title || 'Untitled', img: https(img), href: https(dnr.record_link || ('https://www.si.edu/search/collection-images?edan_q=' + enc(row.title || ''))),
