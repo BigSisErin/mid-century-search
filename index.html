@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mid-Century Search</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Epilogue:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one keyword box on a dark band, sources listed below as scannable rows grouped by how much you can trust the rights. */
+:root {
+  --bg: #F4F2EA;
+  --bg-2: #EAE5D8;
+  --bg-dark: #2E1A0E;
+  --text: #2E1A0E;
+  --text-mid: rgba(46,26,14,0.68);
+  --text-dim: rgba(46,26,14,0.5);
+  --text-inv: #F4F2EA;
+  --text-inv-mid: rgba(244,242,234,0.7);
+  --red: #E91A41;
+  --teal: #3A887D;
+  --rule: rgba(46,26,14,0.14);
+  --field: #FFFFFF;
+  --chip-ok: #3A887D;
+  --chip-mixed: #8a5a12;
+  --chip-ref: #E91A41;
+  --ff-display: 'Dela Gothic One', 'Arial Black', sans-serif;
+  --ff-body: 'Epilogue', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1d120a; --bg-2: #2a1b11; --bg-dark: #120a05;
+    --text: #F4F2EA; --text-mid: rgba(244,242,234,0.72); --text-dim: rgba(244,242,234,0.5);
+    --rule: rgba(244,242,234,0.16); --field: #120a05;
+    --chip-ok: #6fc2b5; --chip-mixed: #e8b567; --chip-ref: #ff6b86; --red: #ff3b5f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1d120a; --bg-2: #2a1b11; --bg-dark: #120a05;
+  --text: #F4F2EA; --text-mid: rgba(244,242,234,0.72); --text-dim: rgba(244,242,234,0.5);
+  --rule: rgba(244,242,234,0.16); --field: #120a05;
+  --chip-ok: #6fc2b5; --chip-mixed: #e8b567; --chip-ref: #ff6b86; --red: #ff3b5f; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--ff-body); font-size: 16px; line-height: 1.6; }
+h1, h2, h3 { font-family: var(--ff-display); font-weight: 400; margin: 0; text-wrap: balance; }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { background: var(--bg-dark); color: var(--text-inv); padding-block: 56px 40px; }
+.eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--red); margin: 0 0 18px; }
+h1 { font-size: clamp(36px, 7vw, 72px); line-height: 1.02; margin-bottom: 14px; }
+.lede { color: var(--text-inv-mid); max-width: 56ch; margin: 0 0 32px; }
+.search { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
+.search input[type=text] { flex: 1 1 320px; min-width: 0; font: 500 20px var(--ff-body); padding: 16px 18px; border: 2px solid transparent; background: #F4F2EA; color: #2E1A0E; border-radius: 4px; }
+.search input[type=text]:focus-visible, button:focus-visible, a:focus-visible, label:focus-within { outline: 3px solid var(--red); outline-offset: 2px; }
+.btn { font: 600 14px var(--ff-body); letter-spacing: .06em; text-transform: uppercase; padding: 16px 22px; border: 0; border-radius: 4px; cursor: pointer; background: var(--red); color: #fff; }
+.btn:hover { filter: brightness(1.08); }
+.row2 { display: flex; flex-wrap: wrap; gap: 20px 28px; align-items: center; margin-top: 20px; }
+.seg { display: inline-flex; border: 1px solid rgba(244,242,234,0.35); border-radius: 4px; overflow: hidden; }
+.seg label { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--text-inv-mid); }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label:has(input:checked) { background: #F4F2EA; color: #2E1A0E; font-weight: 600; }
+.small { font-size: 13px; color: var(--text-inv-mid); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.chip { font: 500 13px var(--ff-body); padding: 6px 12px; border: 1px solid rgba(244,242,234,0.35); background: transparent; color: var(--text-inv); border-radius: 999px; cursor: pointer; }
+.chip:hover { border-color: var(--red); color: #fff; }
+.status { min-height: 1.6em; margin-top: 14px; font-size: 14px; color: var(--text-inv); }
+section.sec { padding-block: 48px 8px; }
+.bar { width: 48px; height: 3px; background: var(--red); margin-bottom: 14px; }
+.label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--text-dim); margin-bottom: 10px; }
+h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.1; margin-bottom: 10px; }
+.sub { color: var(--text-mid); max-width: 62ch; margin: 0 0 22px; }
+.list { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.src { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 16px; align-items: center; background: var(--bg); padding: 16px 18px; }
+.src:nth-child(even) { background: var(--bg-2); }
+.src input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--red); margin: 0; }
+.src h3 { font-family: var(--ff-body); font-weight: 600; font-size: 17px; line-height: 1.3; }
+.src p { margin: 2px 0 0; font-size: 14px; color: var(--text-mid); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+.t-ok { color: var(--chip-ok); } .t-mixed { color: var(--chip-mixed); } .t-ref { color: var(--chip-ref); } .t-neutral { color: var(--text-dim); }
+.go { font: 600 13px var(--ff-body); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; padding: 10px 14px; border: 2px solid var(--text); color: var(--text); border-radius: 4px; white-space: nowrap; }
+.go:hover { background: var(--text); color: var(--bg); }
+.browse a { color: var(--teal); font-weight: 600; }
+.notes { padding-block: 40px 72px; }
+.notes ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 70ch; }
+.notes li { padding-left: 1.6em; position: relative; color: var(--text-mid); }
+.notes li::before { content: "→"; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+@media (max-width: 560px) {
+  .src { grid-template-columns: auto minmax(0, 1fr); }
+  .src .go { grid-column: 2; justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+</head>
+<body>
+<header class="band">
+  <div class="wrap">
+    <p class="eyebrow">Big Sis / Research</p>
+    <h1>Mid-Century Search</h1>
+    <p class="lede">One keyword, every archive. Pick the sources, hit search, and each one opens in its own tab on its own results page.</p>
+
+    <form class="search" id="f" autocomplete="off">
+      <input type="text" id="q" aria-label="Keywords" value="spot illustration" placeholder="Try: gouache, airline, limited color">
+      <button class="btn" type="submit" id="openAll">Search checked sources</button>
+    </form>
+
+    <div class="row2">
+      <div class="seg" role="radiogroup" aria-label="Era">
+        <label><input type="radio" name="era" value="on" checked>1950 to 1969</label>
+        <label><input type="radio" name="era" value="off">Any era</label>
+      </div>
+      <span class="small" id="eraNote">Era filter applies on Internet Archive and Letterform Archive. Other sources search all dates.</span>
+    </div>
+
+    <div class="chips" id="chips" aria-label="Keyword ideas"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="sec">
+    <div class="bar"></div><div class="label">Best for rights</div>
+    <h2>Institutional archives</h2>
+    <p class="sub">Public collections with rights information attached to each item. Still check the item before it goes anywhere near client work.</p>
+    <div class="list" id="g-inst"></div>
+  </section>
+
+  <section class="sec">
+    <div class="bar"></div><div class="label">Best for grit</div>
+    <h2>Scans and ephemera</h2>
+    <p class="sub">Where the real print texture lives. Rights vary by item and are often unknown.</p>
+    <div class="list" id="g-scan"></div>
+  </section>
+
+  <section class="sec">
+    <div class="bar"></div><div class="label">Inspiration only</div>
+    <h2>Reference, not source</h2>
+    <p class="sub">Good for finding the look and the artist names. Don't treat anything found here as usable.</p>
+    <div class="list" id="g-ref"></div>
+  </section>
+
+  <section class="sec browse">
+    <div class="bar"></div><div class="label">Browse, no keyword search</div>
+    <h2>Collections worth a scroll</h2>
+    <p class="sub">These are organized by collection or artist, so the keyword box can't reach them.</p>
+    <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
+      <li>→ <a href="https://www.flickr.com/groups/midcenturyinprint/" target="_blank" rel="noopener">Mid-century Illustrated</a> on Flickr. Member group, 1945 to 1965 posters, comics, recipes.</li>
+      <li>→ <a href="https://www.flickr.com/photos/leifpeng/collections" target="_blank" rel="noopener">leifpeng's collections</a> on Flickr. Retro ads and cartoons sorted by studio and artist.</li>
+      <li>→ <a href="https://archive.org/details/cartoonmodern" target="_blank" rel="noopener">Cartoon Modern</a> on Internet Archive. The full book on 1950s animation design, searchable inside the reader.</li>
+      <li>→ <a href="https://60s.myretrotvs.com/" target="_blank" rel="noopener">My Retro TV</a>. 1950s and 60s commercials and cartoons, sorted by year.</li>
+    </ul>
+  </section>
+
+  <section class="notes">
+    <div class="bar"></div><div class="label">Before you use anything</div>
+    <h2>Keep a source log</h2>
+    <p class="sub">For every image you keep, note the URL, the publication date and the rights statement. It takes ten seconds now and saves a scramble later.</p>
+    <ul>
+      <li>1931 to 1963 US work may be public domain if its copyright was never renewed, but that has to be checked item by item.</li>
+      <li>CC0 on an aggregator doesn't prove the original is public domain.</li>
+      <li>Result pages load in each site's own interface. If a site changes its search address, that button will land on its home page instead of results.</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var enc = encodeURIComponent;
+
+  var SOURCES = [
+    { g: 'inst', id: 'commons', name: 'Flickr Commons', desc: 'Libraries and museums posting photos and scans with no known copyright restrictions.', tags: [['ok','Institutions'],['mixed','Check each item']], on: true,
+      url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q) + '&is_commons=true'; } },
+    { g: 'inst', id: 'loc', name: 'Library of Congress', desc: 'Prints, ads, posters and magazines. Each item carries a rights statement.', tags: [['mixed','Rights per item']], on: true,
+      url: function (q) { return 'https://www.loc.gov/search/?q=' + enc(q) + '&fa=online-format:image'; } },
+    { g: 'inst', id: 'nypl', name: 'NYPL Digital Collections', desc: 'Deep ephemera and advertising holdings. Filter to public domain on the results page.', tags: [['mixed','Filter on page']], on: true,
+      url: function (q) { return 'https://digitalcollections.nypl.org/search/index?keywords=' + enc(q); } },
+    { g: 'inst', id: 'si', name: 'Smithsonian Open Access', desc: 'Trade catalogs and ephemera. CC0 items are marked.', tags: [['ok','CC0 items']], on: true,
+      url: function (q) { return 'https://www.si.edu/search/collection-images?edan_q=' + enc(q); } },
+    { g: 'inst', id: 'wmc', name: 'Wikimedia Commons', desc: 'Best for tracking down one specific image. License is listed on every file.', tags: [['mixed','License per file']], on: false,
+      url: function (q) { return 'https://commons.wikimedia.org/w/index.php?search=' + enc(q) + '&ns6=1'; } },
+
+    { g: 'scan', id: 'iaimg', name: 'Internet Archive, images', desc: 'Uploaded scans and photo sets. Uneven, but this is where odd finds turn up.', tags: [['mixed','Rights vary'],['neutral','Era filter']], on: true,
+      url: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22image%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); } },
+    { g: 'scan', id: 'iatxt', name: 'Internet Archive, magazines and books', desc: 'Trade annuals, ad magazines, catalogs and sample books. The real print texture.', tags: [['mixed','Rights vary'],['neutral','Era filter']], on: true,
+      url: function (q, era) { return 'https://archive.org/search?query=' + enc(q) + '&and[]=mediatype%3A%22texts%22' + (era ? '&and[]=year%3A%5B1950+TO+1969%5D' : ''); } },
+    { g: 'scan', id: 'flickr', name: 'Flickr, everyone', desc: 'Personal scans of mid-century ads, books and packaging. Great grit, unknown rights.', tags: [['ref','Reference only']], on: true,
+      url: function (q) { return 'https://www.flickr.com/search/?text=' + enc(q); } },
+
+    { g: 'ref', id: 'lfa', name: 'Letterform Archive', desc: 'Type specimens, ads and design books. Images are copyrighted.', tags: [['ref','Reference only'],['neutral','Era filter']], on: true,
+      url: function (q, era) { return 'https://oa.letterformarchive.org/?' + (era ? 'dims=Decade&vals0=1950s,1960s&' : '') + 'searchText=' + enc(q); } },
+    { g: 'ref', id: 'pgda', name: "People's Graphic Design Archive", desc: 'Crowd-sourced design history. Its own search is unreliable, so this runs a site search through Google.', tags: [['ref','Reference only']], on: true,
+      url: function (q) { return 'https://www.google.com/search?q=' + enc('site:peoplesgdarchive.org ' + q); } },
+    { g: 'ref', id: 'tumblr', name: 'Mid-Century Modern Graphic Design (Tumblr)', desc: "Theo Inglis's archive. No provenance on posts, so use it to find the look, then trace the source.", tags: [['ref','Reference only']], on: false,
+      url: function (q) { return 'https://midcenturymoderndesign.tumblr.com/search/' + enc(q); } },
+    { g: 'ref', id: 'pin', name: 'Pinterest', desc: 'Fast for finding artist names and styles. Needs a login, and sources are usually lost.', tags: [['ref','Reference only']], on: false,
+      url: function (q) { return 'https://www.pinterest.com/search/pins/?q=' + enc(q); } }
+  ];
+
+  var IDEAS = ['spot illustration', 'gouache', 'limited color', 'screen print', 'trade ad', 'annual report', 'airline poster', 'children’s book', 'packaging', 'atomic age', 'Charley Harper', 'Alexander Girard', 'Mary Blair', 'Saul Bass'];
+
+  var store = {
+    get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var saved = store.get('mcs-checked') || {};
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
+  function render() {
+    ['inst', 'scan', 'ref'].forEach(function (g) {
+      $('#g-' + g).innerHTML = SOURCES.filter(function (s) { return s.g === g; }).map(function (s) {
+        var checked = (s.id in saved) ? saved[s.id] : s.on;
+        return '<div class="src">' +
+          '<input type="checkbox" id="c-' + s.id + '" data-id="' + s.id + '"' + (checked ? ' checked' : '') + ' aria-label="Include ' + esc(s.name) + '">' +
+          '<div><h3>' + esc(s.name) + '</h3><p>' + esc(s.desc) + '</p><div class="tags">' +
+          s.tags.map(function (t) { return '<span class="tag t-' + t[0] + '">' + esc(t[1]) + '</span>'; }).join('') +
+          '</div></div>' +
+          '<a class="go" id="a-' + s.id + '" target="_blank" rel="noopener" href="#">Search</a></div>';
+      }).join('');
+    });
+    $('#chips').innerHTML = IDEAS.map(function (w) { return '<button type="button" class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
+    links();
+  }
+
+  function eraOn() { return document.querySelector('input[name=era]:checked').value === 'on'; }
+  function query() { return $('#q').value.trim(); }
+
+  function links() {
+    var q = query(), era = eraOn();
+    SOURCES.forEach(function (s) {
+      var a = $('#a-' + s.id);
+      if (a) a.href = q ? s.url(q, era) : '#';
+    });
+    var n = SOURCES.filter(function (s) { var c = $('#c-' + s.id); return c && c.checked; }).length;
+    $('#openAll').textContent = 'Search ' + n + ' checked source' + (n === 1 ? '' : 's');
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target.matches('input[type=checkbox]')) {
+      saved[e.target.dataset.id] = e.target.checked;
+      store.set('mcs-checked', saved);
+    }
+    links();
+  });
+  $('#q').addEventListener('input', links);
+  $('#chips').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    var cur = query();
+    $('#q').value = cur ? cur + ' ' + b.dataset.w : b.dataset.w;
+    links(); $('#q').focus();
+  });
+
+  $('#f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var q = query(), st = $('#status');
+    if (!q) { st.textContent = 'Type a keyword first.'; return; }
+    var era = eraOn(), opened = 0, picked = 0;
+    SOURCES.forEach(function (s) {
+      var c = $('#c-' + s.id);
+      if (c && c.checked) {
+        picked++;
+        var w = null;
+        try { w = window.open(s.url(q, era), '_blank'); if (w) w.opener = null; } catch (err) {}
+        if (w) opened++;
+      }
+    });
+    if (!picked) st.textContent = 'Check at least one source.';
+    else if (opened === picked) st.textContent = 'Opened ' + opened + ' tab' + (opened === 1 ? '' : 's') + '.';
+    else st.textContent = 'Your browser blocked the extra tabs. Use the Search button beside each source instead, or allow pop-ups for this page.';
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
